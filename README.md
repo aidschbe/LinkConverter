@@ -9,3 +9,4 @@ This was to circumvent the overzealous domain blocking in our employee housing w
 - check if file before adding to download list
 - prettify GUI (as much as possible with vanilla winforms)
 - check for unhandled exceptions
+- refactor for readability and maintainability
