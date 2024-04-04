@@ -10,3 +10,5 @@ This was to circumvent the overzealous domain blocking in our employee housing w
 - prettify GUI (as much as possible with vanilla winforms)
 - check for unhandled exceptions
 - refactor for readability and maintainability
+- properly name files
+- add percent number to download status label
