@@ -1,6 +1,6 @@
 ﻿namespace LinkConverter
 {
-	partial class Form1
+	partial class FormMain
 	{
 		/// <summary>
 		///  Required designer variable.
@@ -145,7 +145,7 @@
 			labelDownloadStatus.Text = "Download Status";
 			labelDownloadStatus.TextAlign = ContentAlignment.MiddleCenter;
 			// 
-			// Form1
+			// FormMain
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
@@ -161,8 +161,8 @@
 			Controls.Add(textBoxLinkInput);
 			Controls.Add(labelLinkOutput);
 			Controls.Add(labelLinkInput);
-			Name = "Form1";
-			Text = "Form1";
+			Name = "FormMain";
+			Text = "Download via IP";
 			ResumeLayout(false);
 			PerformLayout();
 		}
