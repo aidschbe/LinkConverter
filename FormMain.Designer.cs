@@ -40,12 +40,13 @@
 			progressBarDownload = new ProgressBar();
 			buttonDownload = new Button();
 			labelDownloadStatus = new Label();
+			labelTitle = new Label();
 			SuspendLayout();
 			// 
 			// labelLinkInput
 			// 
 			labelLinkInput.AutoSize = true;
-			labelLinkInput.Location = new Point(12, 46);
+			labelLinkInput.Location = new Point(12, 99);
 			labelLinkInput.Name = "labelLinkInput";
 			labelLinkInput.Size = new Size(73, 15);
 			labelLinkInput.TabIndex = 0;
@@ -54,7 +55,7 @@
 			// labelLinkOutput
 			// 
 			labelLinkOutput.AutoSize = true;
-			labelLinkOutput.Location = new Point(12, 229);
+			labelLinkOutput.Location = new Point(12, 282);
 			labelLinkOutput.Name = "labelLinkOutput";
 			labelLinkOutput.Size = new Size(100, 15);
 			labelLinkOutput.TabIndex = 1;
@@ -64,7 +65,7 @@
 			// 
 			textBoxLinkInput.AcceptsReturn = true;
 			textBoxLinkInput.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-			textBoxLinkInput.Location = new Point(12, 64);
+			textBoxLinkInput.Location = new Point(12, 117);
 			textBoxLinkInput.Multiline = true;
 			textBoxLinkInput.Name = "textBoxLinkInput";
 			textBoxLinkInput.Size = new Size(442, 116);
@@ -72,7 +73,7 @@
 			// 
 			// buttonConvert
 			// 
-			buttonConvert.Location = new Point(12, 186);
+			buttonConvert.Location = new Point(12, 239);
 			buttonConvert.Name = "buttonConvert";
 			buttonConvert.Size = new Size(187, 23);
 			buttonConvert.TabIndex = 3;
@@ -84,7 +85,7 @@
 			// 
 			textBoxLinkOutput.AcceptsReturn = true;
 			textBoxLinkOutput.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-			textBoxLinkOutput.Location = new Point(12, 247);
+			textBoxLinkOutput.Location = new Point(12, 300);
 			textBoxLinkOutput.Multiline = true;
 			textBoxLinkOutput.Name = "textBoxLinkOutput";
 			textBoxLinkOutput.Size = new Size(442, 116);
@@ -93,7 +94,7 @@
 			// textBoxDownloadPath
 			// 
 			textBoxDownloadPath.Anchor = AnchorStyles.Right;
-			textBoxDownloadPath.Location = new Point(461, 64);
+			textBoxDownloadPath.Location = new Point(461, 117);
 			textBoxDownloadPath.Name = "textBoxDownloadPath";
 			textBoxDownloadPath.Size = new Size(337, 23);
 			textBoxDownloadPath.TabIndex = 5;
@@ -101,7 +102,7 @@
 			// labelDownloadPath
 			// 
 			labelDownloadPath.AutoSize = true;
-			labelDownloadPath.Location = new Point(461, 46);
+			labelDownloadPath.Location = new Point(461, 99);
 			labelDownloadPath.Name = "labelDownloadPath";
 			labelDownloadPath.Size = new Size(91, 15);
 			labelDownloadPath.TabIndex = 6;
@@ -109,7 +110,7 @@
 			// 
 			// buttonDownloadPath
 			// 
-			buttonDownloadPath.Location = new Point(804, 64);
+			buttonDownloadPath.Location = new Point(804, 117);
 			buttonDownloadPath.Name = "buttonDownloadPath";
 			buttonDownloadPath.Size = new Size(75, 23);
 			buttonDownloadPath.TabIndex = 7;
@@ -119,14 +120,14 @@
 			// 
 			// progressBarDownload
 			// 
-			progressBarDownload.Location = new Point(460, 157);
+			progressBarDownload.Location = new Point(460, 210);
 			progressBarDownload.Name = "progressBarDownload";
 			progressBarDownload.Size = new Size(338, 23);
 			progressBarDownload.TabIndex = 8;
 			// 
 			// buttonDownload
 			// 
-			buttonDownload.Location = new Point(804, 157);
+			buttonDownload.Location = new Point(804, 210);
 			buttonDownload.Name = "buttonDownload";
 			buttonDownload.Size = new Size(75, 23);
 			buttonDownload.TabIndex = 9;
@@ -138,18 +139,29 @@
 			// 
 			labelDownloadStatus.AutoSize = true;
 			labelDownloadStatus.BackColor = SystemColors.Control;
-			labelDownloadStatus.Location = new Point(594, 139);
+			labelDownloadStatus.Location = new Point(594, 192);
 			labelDownloadStatus.Name = "labelDownloadStatus";
 			labelDownloadStatus.Size = new Size(96, 15);
 			labelDownloadStatus.TabIndex = 10;
 			labelDownloadStatus.Text = "Download Status";
 			labelDownloadStatus.TextAlign = ContentAlignment.MiddleCenter;
 			// 
+			// labelTitle
+			// 
+			labelTitle.AutoSize = true;
+			labelTitle.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+			labelTitle.Location = new Point(272, 38);
+			labelTitle.Name = "labelTitle";
+			labelTitle.Size = new Size(390, 32);
+			labelTitle.TabIndex = 11;
+			labelTitle.Text = "Convert Links or Download Directly";
+			// 
 			// FormMain
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(891, 450);
+			Controls.Add(labelTitle);
 			Controls.Add(labelDownloadStatus);
 			Controls.Add(buttonDownload);
 			Controls.Add(progressBarDownload);
@@ -181,5 +193,6 @@
 		private ProgressBar progressBarDownload;
 		private Button buttonDownload;
 		private Label labelDownloadStatus;
+		private Label labelTitle;
 	}
 }
