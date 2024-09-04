@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.IO;
 using System.Net;
+using System.Web;
 
 namespace LinkConverter;
 
@@ -57,6 +58,7 @@ internal class IpConverter
 		using (var stream = await response.Content.ReadAsStreamAsync())
 		{
 			var filename = link.Substring(link.LastIndexOf("/"));
+			filename = System.Uri.UnescapeDataString(filename);
 			var file = File.Create(path + "/" + filename);
 
 
