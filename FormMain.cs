@@ -42,7 +42,6 @@ namespace LinkConverter
 		{
 			var fileNum = 0;
 
-
 			foreach (var link in links)
 			{
 				fileNum++;

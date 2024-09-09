@@ -22,13 +22,13 @@ internal class IpConverter
 
 				Uri uri = builder.Uri;
 
-				var domainUrl = uri.DnsSafeHost;
+				string domainUrl = uri.DnsSafeHost;
 
 				IPHostEntry domain = Dns.GetHostEntry(domainUrl);
 
-				var domainIp = domain.AddressList.FirstOrDefault();
+				IPAddress domainIp = domain.AddressList.First();
 
-				var result = domainIp + uri.AbsolutePath;
+				string result = domainIp + uri.AbsolutePath;
 
 				convertedLinks.Add(result);
 			}
