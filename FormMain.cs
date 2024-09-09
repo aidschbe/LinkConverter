@@ -68,6 +68,8 @@ namespace LinkConverter
 						progressBarDownload.Value = (int)status.Value;
 					}
 				}
+
+				labelDownloadStatus.Text = "Finished!";
 			}
 		}
 	}
