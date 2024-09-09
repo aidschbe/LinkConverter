@@ -10,13 +10,11 @@ namespace LinkConverter
 			InitializeComponent();
 		}
 
-		private void buttonConvert_Click(object sender, EventArgs e)
+		private void ButtonConvert_Click(object sender, EventArgs e)
 		{
 			textBoxLinkOutput.Clear();
 
-			IpConverter converter = new IpConverter();
-
-			var ipLinks = converter.Convert(textBoxLinkInput.Lines);
+			var ipLinks = IpConverter.Convert(textBoxLinkInput.Lines);
 
 			foreach (var link in ipLinks)
 			{
@@ -31,13 +29,43 @@ namespace LinkConverter
 			textBoxDownloadPath.Text = folderBrowserDialogDownloadPath.SelectedPath;
 		}
 
-		private async void buttonDownload_Click(object sender, EventArgs e)
+		private async void ButtonDownload_Click(object sender, EventArgs e)
 		{
 			progressBarDownload.Value = 0;
 
-			IpConverter converter = new IpConverter();
+			List<string> links = CheckLinksForValidity();
 
-			List<string> links = new List<string>();
+			await AsyncDownload(links);
+		}
+
+		private async Task AsyncDownload(List<string> links)
+		{
+			var fileNum = 0;
+
+
+			foreach (var link in links)
+			{
+				fileNum++;
+
+				labelDownloadStatus.Text = $"File {fileNum} of {links.Count}";
+
+				var progress = IpConverter.Download(link, textBoxDownloadPath.Text);
+
+				await foreach (var status in progress)
+				{
+					if (status.HasValue)
+					{
+						progressBarDownload.Value = (int)status.Value;
+					}
+				}
+
+				labelDownloadStatus.Text = "Finished!";
+			}
+		}
+
+		private List<string> CheckLinksForValidity()
+		{
+			List<string> links = [];
 
 			foreach (var line in textBoxLinkInput.Lines)
 			{
@@ -50,27 +78,7 @@ namespace LinkConverter
 				}
 			}
 
-			var fileNum = 0;
-
-
-			foreach (var link in links)
-			{
-				fileNum++;
-
-				labelDownloadStatus.Text = $"File {fileNum} of {links.Count}";
-
-				var progress = converter.Download(link, textBoxDownloadPath.Text);
-
-				await foreach (var status in progress)
-				{
-					if (status.HasValue)
-					{
-						progressBarDownload.Value = (int)status.Value;
-					}
-				}
-
-				labelDownloadStatus.Text = "Finished!";
-			}
+			return links;
 		}
 	}
 }

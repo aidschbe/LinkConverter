@@ -10,7 +10,7 @@ namespace LinkConverter;
 internal class IpConverter
 {
 
-	public List<string> Convert(IEnumerable<string> links)
+	public static List<string> Convert(IEnumerable<string> links)
 	{
 		List<string> convertedLinks = new List<string>();
 
@@ -37,36 +37,37 @@ internal class IpConverter
 		return convertedLinks;
 	}
 
-	public async IAsyncEnumerable<double?> Download(string link, string path)
+	public static async IAsyncEnumerable<double?> Download(string link, string path)
 	{
 
 		UriBuilder builder = new UriBuilder(link);
 
 		Uri uri = builder.Uri;
 
-		var domainUrl = uri.DnsSafeHost;
+		string domainUrl = uri.DnsSafeHost;
 
 		IPHostEntry domain = Dns.GetHostEntry(domainUrl);
 
-		var domainIp = domain.AddressList.FirstOrDefault();
+		IPAddress domainIp = domain.AddressList.First();
 
-		var client = new HttpClient();
-
-		client.BaseAddress = new Uri("http://" + domainIp.ToString());
+		HttpClient client = new()
+		{
+			BaseAddress = new Uri("http://" + domainIp.ToString())
+		};
 
 		using (var response = await client.GetAsync(uri.AbsolutePath, HttpCompletionOption.ResponseHeadersRead))
 		using (var stream = await response.Content.ReadAsStreamAsync())
 		{
-			var filename = link.Substring(link.LastIndexOf("/"));
+			string filename = link.Substring(link.LastIndexOf("/"));
 			filename = System.Uri.UnescapeDataString(filename);
-			var file = File.Create(path + "/" + filename);
+			FileStream file = File.Create(path + "/" + filename);
 
 
 			long? totalBytes = response.Content.Headers.ContentLength;
 			long bytes = 0;
 			double? percentComplete = (double)bytes / totalBytes * 100;
 
-			var download = stream.CopyToAsync(file);
+			Task download = stream.CopyToAsync(file);
 
 			do
 			{
@@ -77,6 +78,7 @@ internal class IpConverter
 			while (percentComplete < 100);
 
 			file.Close();
+
 			yield return percentComplete;
 		}
 	}

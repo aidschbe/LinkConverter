@@ -79,7 +79,7 @@
 			buttonConvert.TabIndex = 3;
 			buttonConvert.Text = "Convert Link(s)";
 			buttonConvert.UseVisualStyleBackColor = true;
-			buttonConvert.Click += buttonConvert_Click;
+			buttonConvert.Click += ButtonConvert_Click;
 			// 
 			// textBoxLinkOutput
 			// 
@@ -133,7 +133,7 @@
 			buttonDownload.TabIndex = 9;
 			buttonDownload.Text = "Download";
 			buttonDownload.UseVisualStyleBackColor = true;
-			buttonDownload.Click += buttonDownload_Click;
+			buttonDownload.Click += ButtonDownload_Click;
 			// 
 			// labelDownloadStatus
 			// 
