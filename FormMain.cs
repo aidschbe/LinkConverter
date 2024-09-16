@@ -22,7 +22,7 @@ namespace LinkConverter
 			}
 		}
 
-		private void buttonDownloadPath_Click(object sender, EventArgs e)
+		private void ButtonDownloadPath_Click(object sender, EventArgs e)
 		{
 			folderBrowserDialogDownloadPath.ShowDialog();
 
