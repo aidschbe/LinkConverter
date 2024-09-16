@@ -1,4 +1,4 @@
-using System.IO.Enumeration;
+using System;
 
 namespace LinkConverter
 {
@@ -31,35 +31,31 @@ namespace LinkConverter
 
 		private async void ButtonDownload_Click(object sender, EventArgs e)
 		{
-			progressBarDownload.Value = 0;
-
 			List<string> links = CheckLinksForValidity();
 
-			await AsyncDownload(links);
+			IProgress<string> fileNum = new Progress<string>(file => labelDownloadStatus.Text = file);
+			IProgress<int> progress = new Progress<int>(percent => progressBarDownload.Value = percent);
+
+			await AsyncDownload(links, progress, fileNum);
 		}
 
-		private async Task AsyncDownload(List<string> links)
+		private async Task AsyncDownload(List<string> links, IProgress<int> progress, IProgress<string> fileNum)
 		{
-			var fileNum = 0;
+			var fileCount = 0;
 
 			foreach (var link in links)
 			{
-				fileNum++;
+				fileCount++;
 
-				labelDownloadStatus.Text = $"File {fileNum} of {links.Count}";
+				fileNum.Report($"File {fileCount} of {links.Count}");
 
-				var progress = IpConverter.Download(link, textBoxDownloadPath.Text);
+				var download = IpConverter.Download(link, textBoxDownloadPath.Text, progress);
 
-				await foreach (var status in progress)
-				{
-					if (status.HasValue)
-					{
-						progressBarDownload.Value = (int)status.Value;
-					}
-				}
-
-				labelDownloadStatus.Text = "Finished!";
+				await download;
 			}
+
+			labelDownloadStatus.Text = "Finished!";
+
 		}
 
 		private List<string> CheckLinksForValidity()
@@ -79,5 +75,6 @@ namespace LinkConverter
 
 			return links;
 		}
+
 	}
 }

@@ -37,49 +37,64 @@ internal class IpConverter
 		return convertedLinks;
 	}
 
-	public static async IAsyncEnumerable<double?> Download(string link, string path)
+	public static async Task Download(string link, string path, IProgress<int> percent)
 	{
+		percent.Report(0);
 
-		UriBuilder builder = new UriBuilder(link);
-
-		Uri uri = builder.Uri;
-
-		string domainUrl = uri.DnsSafeHost;
-
-		IPHostEntry domain = Dns.GetHostEntry(domainUrl);
-
-		IPAddress domainIp = domain.AddressList.First();
-
-		HttpClient client = new()
-		{
-			BaseAddress = new Uri("http://" + domainIp.ToString())
-		};
+		CreateClient(link, out Uri uri, out HttpClient client);
 
 		using (var response = await client.GetAsync(uri.AbsolutePath, HttpCompletionOption.ResponseHeadersRead))
 		using (var stream = await response.Content.ReadAsStreamAsync())
 		{
 			string filename = link.Substring(link.LastIndexOf("/"));
 			filename = System.Uri.UnescapeDataString(filename);
-			FileStream file = File.Create(path + "/" + filename);
-
+			FileStream file = File.Create(path + "/" + filename); 
 
 			long? totalBytes = response.Content.Headers.ContentLength;
 			long bytes = 0;
-			double? percentComplete = (double)bytes / totalBytes * 100;
+			int? percentComplete = (int)((double)bytes / totalBytes * 100);
 
 			Task download = stream.CopyToAsync(file);
 
-			do
+			Task report = Task.Run(() =>
 			{
-				bytes = file.Length;
-				percentComplete = (double)bytes / totalBytes * 100;
-				yield return percentComplete;
-			}
-			while (percentComplete < 100);
+				while (!download.IsCompleted)
+				{
+					bytes = file.Length;
+					int? oldPercentage = percentComplete;
+					percentComplete = (int)((double)bytes / totalBytes * 100);
 
-			file.Close();
+					if (percentComplete > 100)
+					{
+						continue;
+					}
 
-			yield return percentComplete;
+					if (oldPercentage != percentComplete)
+					{
+						percent.Report((int)percentComplete);
+					}
+
+				}
+			});
+
+			await report;
 		}
+	}
+
+	private static void CreateClient(string link, out Uri uri, out HttpClient client)
+	{
+		UriBuilder builder = new UriBuilder(link);
+
+		uri = builder.Uri;
+		string domainUrl = uri.DnsSafeHost;
+
+		IPHostEntry domain = Dns.GetHostEntry(domainUrl);
+
+		IPAddress domainIp = domain.AddressList.First();
+
+		client = new()
+		{
+			BaseAddress = new Uri("http://" + domainIp.ToString())
+		};
 	}
 }
