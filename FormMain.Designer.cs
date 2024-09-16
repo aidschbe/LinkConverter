@@ -116,7 +116,7 @@
 			buttonDownloadPath.TabIndex = 7;
 			buttonDownloadPath.Text = "Browse";
 			buttonDownloadPath.UseVisualStyleBackColor = true;
-			buttonDownloadPath.Click += buttonDownloadPath_Click;
+			buttonDownloadPath.Click += ButtonDownloadPath_Click;
 			// 
 			// progressBarDownload
 			// 
