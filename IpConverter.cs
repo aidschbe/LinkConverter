@@ -13,23 +13,27 @@ internal class IpConverter
 		{
 			if (link.Length > 0)
 			{
-				UriBuilder builder = new(link);
-
-				Uri uri = builder.Uri;
-
-				string domainUrl = uri.DnsSafeHost;
-
-				IPHostEntry domain = Dns.GetHostEntry(domainUrl);
-
-				IPAddress domainIp = domain.AddressList.First();
-
-				string result = domainIp + uri.AbsolutePath;
-
-				convertedLinks.Add(result);
+				convertedLinks.Add(ResolveUrl(link));
 			}
 		}
 
 		return convertedLinks;
+	}
+
+	private static string ResolveUrl(string link)
+	{
+		UriBuilder builder = new(link);
+
+		Uri uri = builder.Uri;
+
+		string domainUrl = uri.DnsSafeHost;
+
+		IPHostEntry domain = Dns.GetHostEntry(domainUrl);
+
+		IPAddress domainIp = domain.AddressList.First();
+
+		string result = domainIp + uri.AbsolutePath;
+		return result;
 	}
 
 	public static async Task Download(string link, string path, IProgress<int> percent)
@@ -45,9 +49,9 @@ internal class IpConverter
 			filename = Uri.UnescapeDataString(filename);
 			FileStream file = File.Create(path + "/" + filename); 
 
-			long? totalBytes = response.Content.Headers.ContentLength;
-			long bytes = 0;
-			int? percentComplete = (int)((double)bytes / totalBytes * 100);
+			long? fileSize = response.Content.Headers.ContentLength;
+			long bytesDownloaded = 0;
+			int? downloadPercent = (int)((double)bytesDownloaded / fileSize * 100);
 
 			Task download = stream.CopyToAsync(file);
 
@@ -55,18 +59,18 @@ internal class IpConverter
 			{
 				while (!download.IsCompleted)
 				{
-					bytes = file.Length;
-					int? oldPercentage = percentComplete;
-					percentComplete = (int)((double)bytes / totalBytes * 100);
+					bytesDownloaded = file.Length;
+					int? oldPercentage = downloadPercent;
+					downloadPercent = (int)((double)bytesDownloaded / fileSize * 100);
 
-					if (percentComplete > 100)
+					if (downloadPercent > 100)
 					{
 						continue;
 					}
 
-					if (oldPercentage != percentComplete)
+					if (oldPercentage != downloadPercent)
 					{
-						percent.Report((int)percentComplete);
+						percent.Report((int)downloadPercent);
 					}
 
 				}
