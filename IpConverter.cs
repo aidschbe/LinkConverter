@@ -7,13 +7,13 @@ internal class IpConverter
 
 	public static List<string> Convert(IEnumerable<string> links)
 	{
-		List<string> convertedLinks = new List<string>();
+		List<string> convertedLinks = [];
 
 		foreach (var link in links)
 		{
 			if (link.Length > 0)
 			{
-				UriBuilder builder = new UriBuilder(link);
+				UriBuilder builder = new(link);
 
 				Uri uri = builder.Uri;
 
